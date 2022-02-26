@@ -1,4 +1,17 @@
 import math
+from flask import Flask
+
+app = Flask(__name__)
+
+
+@app.route('/')
+def hello():
+    return 'Hello, World!'
+
+
+
+
+
 def reverse_base_conversion(number, base):
   result = 0
   digit = 0 
@@ -40,6 +53,7 @@ number = 0
 base = 10
 numberbase10 = reverse_base_conversion(number, base)
 
+  
 def valid_count(x):
   global number
   global base
@@ -106,3 +120,4 @@ def b(x):
       return 'Nope'
   else:
     return 'Nope'
+
