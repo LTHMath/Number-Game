@@ -45,11 +45,13 @@ numberbase10 = reverse_base_conversion(number, base)
 sp1 = False
 
 def sp1():
-if multi>5:
-  sp1=True
-  return "Success"
-else:
-  return "Nope"
+  global multi
+  global sp1
+  if multi>=5:
+    sp1=True
+    return "Success"
+  else:
+    return "Nope"
 
 
 def megascaling(x):
@@ -79,21 +81,21 @@ def multi_formula(multii):
   global base
   global numberbase10
   global multi
+  global sp1
   if multii==multi+1: 
     x=multii-2
     y=x%2
     z=x//2
     result=z*81+y*40+81
     return base_conversion(result*scaling(x),3)
-  elif sp1 and multii>multi:
+  else:
     x=multii-2
     y=x%2
     z=x//2
     result=z*81+y*40+81
     w=multi_formula(multi+1)
     return w+(result-w)*2
-  else:
-    "Nope"
+  
     
 
 def valid_count(x):
@@ -175,7 +177,7 @@ def m(x):
   global numberbase10
   global multi
   if isinstance(x,int):
-    if number>=multi_formula(x) and x==multi+1 and base==3:
+    if number>=multi_formula(x) and ((x==multi+1) or (x>multi+1 and sp1)) and base==3:
       multi=x
       base=10
       number=0
