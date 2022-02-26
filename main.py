@@ -32,6 +32,7 @@ def base_conversion(number, base):
       result += (int(number) % (base)) * (10**digit)
       digit += 1
       number = (number - (int(number) % (base))) / base
+    return result
   else:
     return result
 
@@ -73,7 +74,8 @@ def base_formula(x):
   global number
   global base
   global numberbase10
-  return round_down(50*(10-x)+50,base)
+  values=[0,0,0,1000,400,300,250,200,150,100]
+  return values[x]
 
 def update():
   global number
@@ -89,3 +91,18 @@ def c(x):
     number = x
     update()
     return x
+
+def b(x):
+  global number
+  global base
+  global numberbase10
+  if base-1==x and x>=3:
+    if number>=base_formula(x):
+      base=x
+      number=0
+      update()
+      return 'Success'
+    else:
+      return 'Nope'
+  else:
+    return 'Nope'
