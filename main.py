@@ -44,6 +44,8 @@ multi = 1
 numberbase10 = reverse_base_conversion(number, base)
 sp1 = False
 sp2 = False
+inac1 = False
+ac1complete = False
 
 def sp1():
   global multi
@@ -62,6 +64,7 @@ def sp2():
     return "Success"
   else:
     return "Nope"
+
 
 
 def megascaling(x):
@@ -104,9 +107,10 @@ def multi_formula(multii):
     z=x//2
     result=z*81+y*40+81
     w=multi_formula(multi+1)
-    return w+(result-w)*2
-  
-    
+    r = ac1complete or inac1
+    r+=1
+    return (w+(result-w)*2)/r
+
 
 def valid_count(x):
   global number
@@ -115,9 +119,9 @@ def valid_count(x):
   global multi
   global sp2
   if sp2:
-    return x <= base_conversion(numberbase10 + multi, base) and x>number
+    return x <= base_conversion(numberbase10 + multi, base) and x>number and isinstance(x,int)
   else:
-    return x == base_conversion(numberbase10 + multi, base)
+    return x == base_conversion(numberbase10 + multi, base) and isinstance(x,int)
 
 def digits(numbert):
   number=str(numbert)
@@ -148,8 +152,12 @@ def base_formula(x):
   global base
   global numberbase10
   global multi
+  global inac1
+  global ac1complete
   values=[0,0,0,1000,400,300,250,200,150,100]
-  return values[x]
+  r = ac1complete or inac1
+  r+=1
+  return values[x]/r
 
 
 def update():
@@ -174,7 +182,7 @@ def b(x):
   global base
   global numberbase10
   global multi
-  if base-1==x and x>=3:
+  if base-1==x and ((x>=3 and not inac1) or (x>3)):
     if number>=base_formula(x):
       base=x
       number=0
@@ -199,5 +207,55 @@ def m(x):
       return "Success"
     else:
       return "Nope"
+  else:
+    return "Nope"
+
+def enterac1():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac1
+  if number>=100000 and not inac1 and not ac1complete:
+    number=0
+    base=10
+    multi=1
+    update()
+    inac1 = True
+    return "Success"
+  else:
+    return "Nope"
+
+def exitac1():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac1
+  if inac1:
+    number=0
+    base=10
+    multi=1
+    update()
+    inac1 = False
+    return "Success"
+  else:
+    return "Nope"
+
+def completeac1():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac1
+  global ac1complete
+  if number>=100000 and inac1:
+    number=0
+    base=10
+    multi=1
+    update()
+    inac1 = False
+    ac1complete = True
+    return "Success"
   else:
     return "Nope"
