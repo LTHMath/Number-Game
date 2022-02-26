@@ -45,6 +45,36 @@ def valid_count(x):
   global numberbase10
   return x == base_conversion(numberbase10 + 1, base)
 
+def digits(numbert):
+  number=str(numbert)
+  int_list = []
+  for i in range(len(number)):
+    int_list.append(int(number[i]))
+  return int_list
+  
+def reverse_digits(digits):
+  result=0
+  for i in range(len(digits)):
+    result+=10**(len(digits)-i-1)*int(digits[i])
+  return result
+  
+def round_down(number,base):
+  x=digits(number)
+  y=[]
+  for i in range(len(x)):
+    if x[i]>=base:
+      new_item=base-1
+    else:
+      new_item=x[i]
+    y.append(new_item)
+  return reverse_digits(y)
+
+def base_formula(x):
+  global number
+  global base
+  global numberbase10
+  return round_down(50*(10-x)+50,base)
+
 def update():
   global number
   global base
