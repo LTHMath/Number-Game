@@ -35,9 +35,6 @@ def base_conversion(number, base):
   else:
     return result
 
-
-
-
 number = 0
 base = 10
 numberbase10 = reverse_base_conversion(number, base)
@@ -46,7 +43,7 @@ def valid_count(x):
   global number
   global base
   global numberbase10
-  return x == number + 1
+  return x == base_conversion(numberbase10 + 1, base)
 
 def update():
   global number
