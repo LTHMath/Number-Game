@@ -1,15 +1,22 @@
 import math
-from flask import Flask
 
-app = Flask(__name__)
+from flask import Flask, render_template
 
+app = Flask(  # Create a flask app
+	__name__,
+	template_folder='templates',  # Name of html file folder
+	static_folder='static'  # Name of directory for static files
+)
 
-@app.route('/')
-def hello():
-    return 'Hello, World!'
-
-
-
+if __name__ == "__main__":  # Makes sure this is the main process
+	app.run( # Starts the site
+		host='0.0.0.0',  # Establishes the host, required for repl to detect the site
+		port=5402
+	)
+  
+@app.route('/')  # '/' for the default page
+def home():
+	return "Wow this is a basic output!"
 
 
 def reverse_base_conversion(number, base):
