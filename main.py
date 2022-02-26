@@ -1,15 +1,4 @@
 import math
-from flask import Flask
-
-app = Flask(__name__)
-
-
-@app.route('/')
-def hello():
-    return 'Hello, World!'
-
-
-
 
 
 def reverse_base_conversion(number, base):
@@ -51,14 +40,49 @@ def base_conversion(number, base):
 
 number = 0
 base = 10
+multi = 1
 numberbase10 = reverse_base_conversion(number, base)
 
-  
+
+def megascaling(x):
+  if x<100:
+    return 1
+  else:
+    y=(x-99)//5
+    z=(x-99)%5
+    result=1
+    for i in range(0,y):
+      result*=(1.01+.002*i)**5
+    result*=(1.01+.002*y)**z
+    return result
+
+def scaling(x):
+  if x<25:
+    return 1
+  elif x<50:
+    return (1.1)**((x-20)//5)
+  elif x<100:
+    return (1.1)**((x-20)//5)*(1.5)**((x-40)//10)
+  else:
+    return (1.1)**((x-20)//5)*(1.5)**((x-40)//10)*megascaling(x)
+
+def multi_formula(multii):
+  global number
+  global base
+  global numberbase10
+  global multi
+  x=multii-2
+  y=x%2
+  z=x//2
+  result=z*81+y*40+81
+  return base_conversion(result*scaling(x),3)
+
 def valid_count(x):
   global number
   global base
   global numberbase10
-  return x == base_conversion(numberbase10 + 1, base)
+  global multi
+  return x == base_conversion(numberbase10 + multi, base)
 
 def digits(numbert):
   number=str(numbert)
@@ -88,6 +112,7 @@ def base_formula(x):
   global number
   global base
   global numberbase10
+  global multi
   values=[0,0,0,1000,400,300,250,200,150,100]
   return values[x]
 
@@ -95,12 +120,14 @@ def update():
   global number
   global base
   global numberbase10
+  global multi
   numberbase10=reverse_base_conversion(number,base)
 
 def c(x):
   global number
   global base
   global numberbase10
+  global multi
   if valid_count(x):
     number = x
     update()
@@ -110,14 +137,31 @@ def b(x):
   global number
   global base
   global numberbase10
+  global multi
   if base-1==x and x>=3:
     if number>=base_formula(x):
       base=x
       number=0
       update()
-      return 'Success'
+      return "Success"
     else:
-      return 'Nope'
+      return "Nope"
   else:
-    return 'Nope'
+    return "Nope"
 
+def m(x):
+  global number
+  global base
+  global numberbase10
+  global multi
+  if isinstance(x,int):
+    if number>=multi_formula(x) and x==multi+1 and base==3:
+      multi=x
+      base=10
+      number=0
+      update()
+      return "Success"
+    else:
+      return "Nope"
+  else:
+    return "Nope"
