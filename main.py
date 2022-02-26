@@ -43,12 +43,22 @@ base = 10
 multi = 1
 numberbase10 = reverse_base_conversion(number, base)
 sp1 = False
+sp2 = False
 
 def sp1():
   global multi
   global sp1
   if multi>=5:
     sp1=True
+    return "Success"
+  else:
+    return "Nope"
+
+def sp2():
+  global multi
+  global sp2
+  if multi>=10:
+    sp2=True
     return "Success"
   else:
     return "Nope"
@@ -103,7 +113,11 @@ def valid_count(x):
   global base
   global numberbase10
   global multi
-  return x == base_conversion(numberbase10 + multi, base)
+  global sp2
+  if sp2:
+    return x <= base_conversion(numberbase10 + multi, base) and x>number
+  else:
+    return x == base_conversion(numberbase10 + multi, base)
 
 def digits(numbert):
   number=str(numbert)
