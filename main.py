@@ -49,6 +49,8 @@ numberbase10 = reverse_base_conversion(number, base)
 starting_number = incremety*multi
 sp1 = False
 sp2 = False
+sp3 = False
+sp3setting=0
 inac1 = False
 ac1complete = False
 inac2 = False
@@ -72,7 +74,22 @@ def sp2():
   else:
     return "Nope"
 
+def sp3():
+  global multi
+  global sp3
+  if multi>=30:
+    sp3=True
+    return "Success"
+  else:
+    return "Nope"
 
+def sp3setting(x):
+  global sp3
+  global sp3setting
+  if sp3:
+    sp3setting=x
+  else:
+    pass
 
 def megascaling(x):
   if x<100:
@@ -204,10 +221,11 @@ def c(x):
   global base
   global numberbase10
   global multi
-  if valid_count(x):
+  global sp3setting
+  if valid_count(x*10**sp3setting):
     number = x
     update()
-    return x
+    return x*10**sp3setting
 
 def iv(x):
   global incremety
