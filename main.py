@@ -55,6 +55,8 @@ inac1 = False
 ac1complete = False
 inac2 = False
 ac2complete = False
+inac3 = False
+ac3complete = False
 
 def sp1():
   global multi
@@ -104,14 +106,15 @@ def megascaling(x):
     return result
 
 def scaling(x):
+  ac3factor=1+.5*inac3
   if x<25:
     return 1
   elif x<50:
-    return (1.1)**((x-20)//5)
+    return (1.1)**((x-20)//5)*ac3factor
   elif x<100:
-    return (1.1)**((x-20)//5)*(1.5)**((x-40)//10)
+    return (1.1)**((x-20)//5)*(1.5)**((x-40)//10)*ac3factor
   else:
-    return (1.1)**((x-20)//5)*(1.5)**((x-40)//10)*megascaling(x)
+    return (1.1)**((x-20)//5)*(1.5)**((x-40)//10)*megascaling(x)*ac3factor
 
 def multi_formula(multii):
   global number
@@ -124,7 +127,8 @@ def multi_formula(multii):
     y=x%2
     z=x//2
     result=z*81+y*40+81
-    return base_conversion(result*scaling(x),3)
+    ac3factor=1+2*inac3
+    return base_conversion(result*scaling(x)*ac3factor,3)
   else:
     x=multii-2
     y=x%2
@@ -133,6 +137,7 @@ def multi_formula(multii):
     w=multi_formula(multi+1)
     r = ac1complete or inac1 and (not inac2)
     r+=1
+    
     return (w+(result-w)*2)/r
 
 
@@ -200,7 +205,6 @@ def base_formula(x):
   r+=1
   return values[x]/r
 
-
 def update():
   global number
   global base
@@ -214,7 +218,6 @@ def update():
   incremetymulti=multi//5+1
   incremetybase10=reverse_base_conversion(incremety,base)
   starting_number=multi*incremety
-  
 
 def c(x):
   global number
@@ -223,7 +226,7 @@ def c(x):
   global multi
   global sp3setting
   if valid_count(x*10**sp3setting):
-    number = x
+    number = x*10**sp3setting
     update()
     return x*10**sp3setting
 
@@ -234,6 +237,27 @@ def iv(x):
     incremety = x
     update()
     return x
+    
+def ib(x):
+  global incremety
+  global incremetybase
+  global number
+  global base
+  global multi
+  global inac3
+  global ac3complete
+  values=[0,5000,10000,15000,20000]
+  if x>0 and incremety>values[x] and (inac3 or ac3complete):
+    incremetybase=10-x
+    number=0
+    incremety=0
+    base=10
+    multi=1
+    update()
+    return "Success"
+  else:
+    return "Nope"
+  
 
 def b(x):
   global number
@@ -377,6 +401,63 @@ def completeac2():
     update()
     inac2 = False
     ac2complete = True
+    return "Success"
+  else:
+    return "Nope"
+
+
+def enterac3():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac3
+  global incremety
+  if number>=100000000 and not inac1 and not ac1complete:
+    number=0
+    base=10
+    multi=1
+    incremety=0
+    update()
+    inac3 = True
+    return "Success"
+  else:
+    return "Nope"
+
+def exitac3():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac3
+  global incremety
+  if inac3:
+    number=0
+    base=10
+    multi=1
+    incremety=0
+    update()
+    inac3 = False
+    return "Success"
+  else:
+    return "Nope"
+
+def completeac3():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac3
+  global ac3complete
+  global incremety
+  if number>=100000000 and inac1:
+    number=0
+    base=10
+    multi=1
+    incremety=0
+    update()
+    inac3 = False
+    ac3complete = True
     return "Success"
   else:
     return "Nope"
