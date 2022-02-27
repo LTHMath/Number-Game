@@ -1,6 +1,7 @@
 import math
 
-
+print("Hello user! Here are commands: c(x): Count to x, b(x): Reset to base x, spn(): Get spn, enteracn(): Enter acn, completeacn(): Complete acn, exitacn(): Exit acn, iv(x): Count in iv to x, m(x): Reset to multi x, sp3setting(x): Set your sp3 to x, incremental_sacrifice(): Incremental sacrifice, ib(x): Get ib x")
+      
 def reverse_base_conversion(number, base):
   result = 0
   digit = 0 
@@ -45,11 +46,13 @@ incremetybase = 10
 base = 10
 multi = 1
 incremetymulti = multi//5 + 1
+incrementalsacrifice = 1
 numberbase10 = reverse_base_conversion(number, base)
 starting_number = incremety*multi
 sp1 = False
 sp2 = False
 sp3 = False
+sp4 = False
 sp3setting=0
 inac1 = False
 ac1complete = False
@@ -81,6 +84,15 @@ def sp3():
   global sp3
   if multi>=30:
     sp3=True
+    return "Success"
+  else:
+    return "Nope"
+
+def sp4():
+  global multi
+  global sp4
+  if multi>=60:
+    sp4=True
     return "Success"
   else:
     return "Nope"
@@ -137,7 +149,6 @@ def multi_formula(multii):
     w=multi_formula(multi+1)
     r = ac1complete or inac1 and (not inac2)
     r+=1
-    
     return (w+(result-w)*2)/r
 
 
@@ -164,10 +175,11 @@ def valid_incremety(x):
   global incremetybase
   global ac2complete
   global inac2
+  global incrementalsacrifice
   if sp2:
-    return x <= base_conversion(incremetybase10 + incremetymulti, incremetybase) and x>incremety and isinstance(x,int)
+    return x <= base_conversion(incremetybase10 + incremetymulti*incrementalsacrifice, incremetybase) and x>incremety and isinstance(x,int)
   else:
-    return x == base_conversion(incremetybase10 + incremetymulti, incremetybase) and isinstance(x,int) and (ac2complete or inac2)
+    return x == base_conversion(incremetybase10 + incremetymulti*incrementalsacrifice, incremetybase) and isinstance(x,int) and (ac2complete or inac2)
 
 def digits(numbert):
   number=str(numbert)
@@ -219,6 +231,28 @@ def update():
   incremetybase10=reverse_base_conversion(incremety,base)
   starting_number=multi*incremety
 
+def incremental_sacrifice():
+  global incrementalsacrifice
+  global incremety
+  global incremetybase
+  global number
+  global base
+  global multi
+  global inac3
+  global ac3complete
+  result = math.log(number,10)**1.5
+  if sp4 and incrementalsacrifice<result:
+    number=0
+    incremety=0
+    base=10
+    multi=1
+    update()
+    incrementalsacrifice=result
+    return result
+  else:
+    return "Nope"
+
+    
 def c(x):
   global number
   global base
