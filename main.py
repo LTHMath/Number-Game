@@ -39,13 +39,20 @@ def base_conversion(number, base):
     return result
 
 number = 0
+incremety = 0
+incremetybase10 = 0
+incremetybase = 10
 base = 10
 multi = 1
+incremetymulti = multi//5 + 1
 numberbase10 = reverse_base_conversion(number, base)
+starting_number = incremety*multi
 sp1 = False
 sp2 = False
 inac1 = False
 ac1complete = False
+inac2 = False
+ac2complete = False
 
 def sp1():
   global multi
@@ -107,7 +114,7 @@ def multi_formula(multii):
     z=x//2
     result=z*81+y*40+81
     w=multi_formula(multi+1)
-    r = ac1complete or inac1
+    r = ac1complete or inac1 and (not inac2)
     r+=1
     return (w+(result-w)*2)/r
 
@@ -122,6 +129,23 @@ def valid_count(x):
     return x <= base_conversion(numberbase10 + multi, base) and x>number and isinstance(x,int)
   else:
     return x == base_conversion(numberbase10 + multi, base) and isinstance(x,int)
+
+def valid_incremety(x):
+  global number
+  global base
+  global numberbase10
+  global multi
+  global sp2
+  global incremety
+  global incremetymulti
+  global incremetybase10
+  global incremetybase
+  global ac2complete
+  global inac2
+  if sp2:
+    return x <= base_conversion(incremetybase10 + incremetymulti, incremetybase) and x>incremety and isinstance(x,int)
+  else:
+    return x == base_conversion(incremetybase10 + incremetymulti, incremetybase) and isinstance(x,int) and (ac2complete or inac2)
 
 def digits(numbert):
   number=str(numbert)
@@ -155,7 +179,7 @@ def base_formula(x):
   global inac1
   global ac1complete
   values=[0,0,0,1000,400,300,250,200,150,100]
-  r = ac1complete or inac1
+  r = (ac1complete or inac1) and (not inac2)
   r+=1
   return values[x]/r
 
@@ -165,7 +189,15 @@ def update():
   global base
   global numberbase10
   global multi
+  global incremetymulti
+  global incremety
+  global incremetybase10
+  global starting_number
   numberbase10=reverse_base_conversion(number,base)
+  incremetymulti=multi//5+1
+  incremetybase10=reverse_base_conversion(incremety,base)
+  starting_number=multi*incremety
+  
 
 def c(x):
   global number
@@ -177,16 +209,25 @@ def c(x):
     update()
     return x
 
+def iv(x):
+  global incremety
+  global incremetybase
+  if valid_incremety(x) and legalnumberinbase(x,incremetybase):
+    incremety = x
+    update()
+    return x
+
 def b(x):
   global number
   global base
   global numberbase10
   global multi
+  global starting_number
   if base-1==x and ((x>=3 and not inac1) or (x>3)):
     if number>=base_formula(x):
       base=x
-      number=0
       update()
+      number=starting_number
       return "Success"
     else:
       return "Nope"
@@ -202,8 +243,8 @@ def m(x):
     if number>=multi_formula(x) and ((x==multi+1) or (x>multi+1 and sp1)) and base==3:
       multi=x
       base=10
-      number=0
       update()
+      number=starting_number
       return "Success"
     else:
       return "Nope"
@@ -216,10 +257,12 @@ def enterac1():
   global numberbase10
   global multi
   global inac1
+  global incremety
   if number>=100000 and not inac1 and not ac1complete:
     number=0
     base=10
     multi=1
+    incremety=0
     update()
     inac1 = True
     return "Success"
@@ -232,10 +275,12 @@ def exitac1():
   global numberbase10
   global multi
   global inac1
+  global incremety
   if inac1:
     number=0
     base=10
     multi=1
+    incremety=0
     update()
     inac1 = False
     return "Success"
@@ -249,13 +294,71 @@ def completeac1():
   global multi
   global inac1
   global ac1complete
+  global incremety
   if number>=100000 and inac1:
     number=0
     base=10
     multi=1
+    incremety=0
     update()
     inac1 = False
     ac1complete = True
+    return "Success"
+  else:
+    return "Nope"
+
+def enterac2():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac2
+  global incremety
+  if number>=1000000 and not inac1 and not ac1complete:
+    number=0
+    base=10
+    multi=1
+    incremety=0
+    update()
+    inac2 = True
+    return "Success"
+  else:
+    return "Nope"
+
+def exitac2():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac2
+  global incremety
+  if inac2:
+    number=0
+    base=10
+    multi=1
+    incremety=0
+    update()
+    inac2 = False
+    return "Success"
+  else:
+    return "Nope"
+
+def completeac2():
+  global number
+  global base
+  global numberbase10
+  global multi
+  global inac2
+  global ac2complete
+  global incremety
+  if number>=1000000 and inac1:
+    number=0
+    base=10
+    multi=1
+    incremety=0
+    update()
+    inac2 = False
+    ac2complete = True
     return "Success"
   else:
     return "Nope"
